@@ -1,11 +1,15 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>To Do List</title>
-</head>
-<body>
-    <h1>It's <%=today%>!</h1>    
-</body>
+  </head>
+  <body>
+    <%if(today === "the weekend!"){%>
+    <h1 style="color: red">It's <%=today%>!</h1>
+    <%} else{%>
+    <h1 style="color: orange">It's <%=today%>!</h1>
+    <%}%>
+  </body>
 </html>
