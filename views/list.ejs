@@ -6,10 +6,22 @@
     <title>To Do List</title>
   </head>
   <body>
-    <%if(today === "the weekend!"){%>
-    <h1 style="color: red">It's <%=today%>!</h1>
-    <%} else{%>
-    <h1 style="color: orange">It's <%=today%>!</h1>
-    <%}%>
+    <h1 style="color: red">It's <%=today%> my dudes!</h1>
+
+    <ul>
+      <li>Code</li>
+      <li>Read Game of Thrones</li>
+      <li>Workout</li>
+
+      <%# Iterate through each new item and add as new list item %>
+      <% for(var i = 0; i < newitem.length;i++){ %>
+        <li><%=newitem%></li>
+      <% } %>
+    </ul>
+
+    <form action="/" method="POST">
+      <input type="text" name="newItem" />
+      <button type="submit" name="button">Add</button>
+    </form>
   </body>
 </html>
