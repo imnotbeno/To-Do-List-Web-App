@@ -12,6 +12,8 @@ app.set("view engine", "ejs");
 //Initializing the body parser module
 app.use(bodyParser.urlencoded({extended:true}));
 
+app.use(express.static("public"));
+
 app.get("/", function (req, res) {
   
   //Options for the date
