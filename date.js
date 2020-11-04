@@ -1,9 +1,7 @@
 exports.getDate = getDate;
 exports.getDay = getDay;
 
-
 function getDate() {
-
   //Options for the date
   var options = {
     weekday: "long",
@@ -15,23 +13,18 @@ function getDate() {
   var date = new Date();
 
   // function to get the date in english with specific options
-  var day = date.toLocaleDateString("en-UK", options);
-
-  return day;
+  return date.toLocaleDateString("en-UK", options);
 }
 
 function getDay() {
-    
-    //Options for the date
-    var options = {
-      weekday: "long",
-    };
-  
-    // New instance of the class Date
-    var date = new Date();
-  
-    // function to get the date in english with specific options
-    var day = date.toLocaleDateString("en-UK", options);
-  
-    return day;
+  //Options for the date
+  var options = {
+    weekday: "long",
+  };
+
+  // New instance of the class Date
+  var date = new Date();
+
+  // function to get the date in english with specific options
+  return date.toLocaleDateString("en-UK", options);
 }
