@@ -50,14 +50,21 @@ app.post("/", function (req, res) {
   }
 });
 
+//Get request for work tab
 app.get("/work", function (req, res) {
   res.render("list", { listTitle: "Work List", newitem: workitems });
 });
 
+//Post request for work tab
 app.post("/work", function (req, res) {
   let item = req.body.newitem;
   workitems.push(item);
   res.redirect("/work");
+});
+
+//Get request for about tab
+app.get("/about", function(req,res){
+  res.render("about");
 });
 
 app.listen(3000, function () {
