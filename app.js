@@ -2,6 +2,7 @@ const express = require("express");
 const app = express();
 const https = require("https");
 const bodyParser = require("body-parser");
+const date = require(__dirname + "/date.js");
 
 //Array of new items
 var items = [];
@@ -16,31 +17,18 @@ app.use(bodyParser.urlencoded({ extended: true }));
 app.use(express.static("public"));
 
 app.get("/", function (req, res) {
-  //Options for the date
-  var options = {
-    weekday: "long",
-    day: "numeric",
-    month: "long",
-  };
-
-  // New instance of the class Date
-  var date = new Date();
-
-  // function to get the date in english with specific options
-  var day = date.toLocaleDateString("en-UK", options);
+  var day = date.getDay();
 
   res.render("list", { listTitle: day, newitem: items });
 });
 
 app.post("/", function (req, res) {
-
   // get value from input/new item
   var item = req.body.newItem;
 
   if (req.body.list === "Work List") {
     workitems.push(item);
     res.redirect("/work");
-
   } else {
     //append new item into array of items
     items.push(item);
@@ -63,7 +51,7 @@ app.post("/work", function (req, res) {
 });
 
 //Get request for about tab
-app.get("/about", function(req,res){
+app.get("/about", function (req, res) {
   res.render("about");
 });
 
