@@ -3,10 +3,14 @@ const app = express();
 const https = require("https");
 const bodyParser = require("body-parser");
 const date = require(__dirname + "/date.js");
+const mongoose = require("mongoose");
 
-//Array of new items
-var items = [];
-var workitems = [];
+//Establish connection and create database
+mongoose.connect("https://mongodb://localhost:27017/todolistDB", {useNewUrlParser:true},{useUnifiedTopology: true});
+
+const itemsSchema = new mongoose.Schema({
+  name: String,
+});
 
 //Initializing the ejs module
 app.set("view engine", "ejs");
