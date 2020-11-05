@@ -2,15 +2,11 @@ const express = require("express");
 const app = express();
 const https = require("https");
 const bodyParser = require("body-parser");
-const date = require(__dirname + "/date.js");
+//const date = require(__dirname + "/date.js");
 const mongoose = require("mongoose");
 
 //Establish connection and create database
 mongoose.connect("https://mongodb://localhost:27017/todolistDB", {useNewUrlParser:true},{useUnifiedTopology: true});
-
-const itemsSchema = new mongoose.Schema({
-  name: String,
-});
 
 //Initializing the ejs module
 app.set("view engine", "ejs");
@@ -20,10 +16,31 @@ app.use(bodyParser.urlencoded({ extended: true }));
 
 app.use(express.static("public"));
 
-app.get("/", function (req, res) {
-  var day = date.getDay();
+const itemsSchema = new mongoose.Schema({
+  name: String
+});
 
-  res.render("list", { listTitle: day, newitem: items });
+const item1 = new Item({
+  name: "Welcome to your todo list!"
+});
+
+const item2 = new Item({
+  name: "Hit the + button to add a new item."
+});
+
+const item3 = new Item({
+  name: "<-- Hit this to delete an item."
+});
+
+//Array of our items
+const defaultItems = [items1, items2, items3];
+
+const Item = mongoose.Model("Item", itemsSchema);
+
+app.get("/", function (req, res) {
+  //var day = date.getDay();
+
+  res.render("list", { listTitle: "Today", newitem: items });
 });
 
 app.post("/", function (req, res) {
