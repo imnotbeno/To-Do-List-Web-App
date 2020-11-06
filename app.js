@@ -6,7 +6,10 @@ const bodyParser = require("body-parser");
 const mongoose = require("mongoose");
 
 //Establish connection and create database
-mongoose.connect("https://mongodb://localhost:27017/todolistDB", {useNewUrlParser:true},{useUnifiedTopology: true});
+mongoose.connect("https://mongodb://localhost:27017/todolistDB", {
+  useNewUrlParser: true,
+  useUnifiedTopology: true,
+});
 
 //Initializing the ejs module
 app.set("view engine", "ejs");
@@ -17,39 +20,45 @@ app.use(bodyParser.urlencoded({ extended: true }));
 app.use(express.static("public"));
 
 const itemsSchema = new mongoose.Schema({
-  name: String
+  name: String,
 });
 
 const Item = mongoose.model("Item", itemsSchema);
 
+//Default items
 const item1 = new Item({
-  name: "Welcome to your todo list!"
+  name: "Welcome to your todo list!",
 });
 
 const item2 = new Item({
-  name: "Hit the + button to add a new item."
+  name: "Hit the + button to add a new item.",
 });
 
 const item3 = new Item({
-  name: "<-- Hit this to delete an item."
+  name: "<-- Hit this to delete an item.",
 });
 
 //Array of our items
 const defaultItems = [item1, item2, item3];
 
-Item.insertMany(defaultItems, function(err){
-  if(err){
-    console.log(err);
-  }
-  else{
-    console.log("Items were successfully inserted to DB!");
-  }
-});
-
 app.get("/", function (req, res) {
   //var day = date.getDay();
 
-  res.render("list", { listTitle: "Today", newitem: items });
+  Item.find({}, function (err, foundItems) {
+    if (foundItems.length === 0) {
+      //Inserting the items into DB
+      Item.insertMany(defaultItems, function (err) {
+        if (err) {
+          console.log(err);
+        } else {
+          console.log("Items were successfully inserted to DB!");
+        }
+      });
+      res.redirect("/"); //Redirect back to home route so it renders the list
+    } else {
+      res.render("list", { listTitle: "Today", newitem: foundItems });
+    }
+  });
 });
 
 app.post("/", function (req, res) {
