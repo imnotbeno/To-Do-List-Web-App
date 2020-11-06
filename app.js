@@ -42,6 +42,15 @@ const item3 = new Item({
 //Array of our items
 const defaultItems = [item1, item2, item3];
 
+//Schema for lists in different tabs
+const listSchema = {
+  name: String,
+  items: [itemsSchema],
+};
+
+//Model for lists in different tabs
+const List = mongoose.model("List", listSchema);
+
 app.get("/", function (req, res) {
   //var day = date.getDay();
 
@@ -62,6 +71,28 @@ app.get("/", function (req, res) {
   });
 });
 
+//To get custom site names
+app.get("/:customListName", function (req, res) {
+  const customListName = req.params.customListName;
+
+  List.findOne({ name: customListName }, function (err, foundDocs) {
+    if (!err) {
+      if (!foundDocs) {
+        //Create a new list
+        const list = new List({
+          name: customListName,
+          items: defaultItems,
+        });
+        list.save();
+        res.redirect("/" + customListName);
+      } else {
+        //Show existing list
+        res.render("list",{ listTitle: foundDocs.name, newitem: foundDocs.items });
+      }
+    }
+  });
+});
+
 app.post("/", function (req, res) {
   // get value from input/new item
   const itemName = req.body.newItem;
@@ -75,7 +106,6 @@ app.post("/", function (req, res) {
 });
 
 app.post("/delete", function (req, res) {
-
   const checkedItemId = req.body.checkbox;
 
   Item.findByIdAndRemove(checkedItemId, function (err) {
@@ -85,12 +115,6 @@ app.post("/delete", function (req, res) {
       console.log("Item has been deleted!");
     }
   });
-
-});
-
-//Get request for work tab
-app.get("/work", function (req, res) {
-  res.render("list", { listTitle: "Work List", newitem: workitems });
 });
 
 //Post request for work tab
