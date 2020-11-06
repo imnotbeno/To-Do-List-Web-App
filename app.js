@@ -9,6 +9,7 @@ const mongoose = require("mongoose");
 mongoose.connect("https://mongodb://localhost:27017/todolistDB", {
   useNewUrlParser: true,
   useUnifiedTopology: true,
+  useFindAndModify: false,
 });
 
 //Initializing the ejs module
@@ -63,18 +64,28 @@ app.get("/", function (req, res) {
 
 app.post("/", function (req, res) {
   // get value from input/new item
-  var item = req.body.newItem;
+  const itemName = req.body.newItem;
 
-  if (req.body.list === "Work List") {
-    workitems.push(item);
-    res.redirect("/work");
-  } else {
-    //append new item into array of items
-    items.push(item);
+  const newItem = new Item({
+    name: itemName,
+  });
 
-    //redirect to home route
-    res.redirect("/");
-  }
+  newItem.save();
+  res.redirect("/");
+});
+
+app.post("/delete", function (req, res) {
+
+  const checkedItemId = req.body.checkbox;
+
+  Item.findByIdAndRemove(checkedItemId, function (err) {
+    if (err) {
+      console.log(err);
+    } else {
+      console.log("Item has been deleted!");
+    }
+  });
+
 });
 
 //Get request for work tab
