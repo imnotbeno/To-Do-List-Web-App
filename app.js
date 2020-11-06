@@ -104,7 +104,7 @@ app.post("/", function (req, res) {
   });
 
   if(listName === "Today"){
-    item.save();
+    newItem.save();
     res.redirect();
   }else{
     List.findOne({name: listName}, function(err, foundList){
@@ -123,6 +123,7 @@ app.post("/delete", function (req, res) {
       console.log(err);
     } else {
       console.log("Item has been deleted!");
+      res.redirect("back");
     }
   });
 });
