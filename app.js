@@ -88,7 +88,10 @@ app.get("/:customListName", function (req, res) {
         res.redirect("/" + customListName);
       } else {
         //Show existing list
-        res.render("list",{ listTitle: foundDocs.name, newitem: foundDocs.items });
+        res.render("list", {
+          listTitle: foundDocs.name,
+          newitem: foundDocs.items,
+        });
       }
     }
   });
@@ -103,29 +106,37 @@ app.post("/", function (req, res) {
     name: itemName,
   });
 
-  if(listName === "Today"){
+  if (listName === "Today") {
     newItem.save();
     res.redirect();
-  }else{
-    List.findOne({name: listName}, function(err, foundList){
+  } else {
+    List.findOne({ name: listName }, function (err, foundList) {
       foundList.items.push(newItem);
       foundList.save();
-      res.redirect("/"+listName);
-    })
+      res.redirect("/" + listName);
+    });
   }
 });
 
 app.post("/delete", function (req, res) {
   const checkedItemId = req.body.checkbox;
+  const listName = req.body.listName;
 
-  Item.findByIdAndRemove(checkedItemId, function (err) {
-    if (err) {
-      console.log(err);
-    } else {
-      console.log("Item has been deleted!");
-      res.redirect("back");
-    }
-  });
+  if (listName === "Today") {
+    Item.findByIdAndRemove(checkedItemId, function (err) {
+      if (!err) {
+        console.log("Item has been deleted!");
+        res.redirect("/");
+      }
+    });
+  } else {
+    List.findOneAndUpdate({name: listName}, {$pull: {items: {_id: checkedItemId}}},function(err){
+      if(!err){
+        console.log("Item has been deleted!");
+        res.redirect("/" + listName);
+      }
+    });
+  }
 });
 
 //Post request for work tab

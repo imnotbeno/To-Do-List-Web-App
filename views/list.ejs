@@ -9,6 +9,7 @@
       <input type="checkbox" name="checkbox" value="<%=newitem[i]._id%>" onChange="this.form.submit()"/>
       <p><%=newitem[i].name%></p>
     </div>
+    <input type="hidden" name="listName" value="<%=listTitle%>">
   </form>
   <% } %>
 
